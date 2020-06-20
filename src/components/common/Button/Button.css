@@ -1,0 +1,65 @@
+.reButton.noOutline:active,
+.reButton.noOutline:focus {
+	outline: 0;
+}
+.reButton.disabled {
+	opacity: 0.6;
+	cursor: default;
+}
+
+.reButton {
+    padding: 4px 16px;
+    min-width: 50px;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    display: inline-flex;
+    font-size: 12px;
+    cursor: pointer;
+    user-select: none;
+    transition: background-color 0.15s linear, max-width 0.15s ease-in-out, padding 0.15s ease-in-out, margin 0.15s ease-in-out;
+  }
+  .reButton:not(:first-of-type) {
+    margin-left: 5px;
+  }
+  .reButton.aqua {
+    background-color: #0fa89e;
+    color: white;
+  }
+  .reButton.aqua:hover:not(.disabled) {
+    background-color: #12e4d6;
+  }
+  .reButton.white {
+    background-color: white;
+    color: #0f1621;
+  }
+  .reButton.white:hover:not(.disabled) {
+    background-image: rgba(15, 22, 33, 0.2);
+  }
+  .reButton.dark {
+    background-color: #0f1621;
+    color: white;
+  }
+  .reButton.dark:hover:not(.disabled) {
+    background-color: #1b222c;
+  }
+  .reButton.hollow {
+    background-color: transparent;
+    color: #0fa89e;
+    border: 1px solid #0fa89e;
+  }
+  .reButton.hollow:hover {
+    color: white;
+    background-color: #12e4d6;
+  }
+  .reButton.hollow.disabled {
+    color: #f2f2f2;
+    border-color: #f2f2f2;
+  }
+  .reButton.hollow.disabled:hover {
+    color: #f2f2f2;
+    border-color: #f2f2f2;
+    background-color: transparent;
+    cursor: default;
+  }
+  
