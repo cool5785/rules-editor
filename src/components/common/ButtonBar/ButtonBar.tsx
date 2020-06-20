@@ -1,6 +1,7 @@
 
 import React from "react";
 import { Button } from "../Button/Button";
+import "./ButtonBar.css";
 
 interface Props {
     labels: (string | JSX.Element)[];
@@ -32,7 +33,7 @@ export const ButtonBar: React.SFC<Props> = props => {
 		if (!(checked && checked > labels.length)) {
 			setSelected(checked);
 		}
-	}, [checked]);
+	}, [checked, labels.length]);
     
 	let idAttr: idAttribute = {};
 	if (id) {
@@ -47,12 +48,13 @@ export const ButtonBar: React.SFC<Props> = props => {
 	};
 
     return (
-        <div className={"reToggle " + className}
+        <div className={"reButtonBar " + className}
             style={style}
         >
             {labels.map((label, i) => {
                 return (
                     <Button
+                        theme={selected === i ? "aqua": "hollow"}
                         {...idAttr}
                         style={{ width: `${100 / labels.length}%` }}
                         className={"button"}

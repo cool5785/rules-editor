@@ -1,9 +1,10 @@
 // import {useState} from "react";
 import React from "react";
-import { Button } from "./common/button/button";
+// import {  } from "./common";
+import {Button, ButtonBar } from "./common";
 
 interface Props {
-
+  
 }
 
 export const Group = (props: Props) => {
@@ -16,6 +17,12 @@ export const Group = (props: Props) => {
 
             theme="aqua"
             onClick={()=> { console.log("Button is clicked")}} />
+            <ButtonBar
+                labels={["AND", "OR"]}
+                onChange={(i)=> {
+                    console.log("you have selected", i); 
+                }}
+            ></ButtonBar>
       </div>
     )
   }
