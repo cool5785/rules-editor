@@ -30,7 +30,8 @@ export const FieldConfig: {[key: string]: IField} = {
     qty: {
         label: 'Qty',
         value: 'qty',
-        componentType: 'number',
+        valueType: "number",
+        componentType: 'input',
         fieldSettings: {
             min: 0,
         },
@@ -38,7 +39,8 @@ export const FieldConfig: {[key: string]: IField} = {
     price: {
         label: 'Price',
         value: 'price',
-        componentType: 'number',
+        valueType: "number",
+        componentType: 'input',
         fieldSettings: {
             min: 10,
             max: 100,
@@ -47,6 +49,7 @@ export const FieldConfig: {[key: string]: IField} = {
     color: {
         label: 'Color',
         value: 'color',
+        valueType: "text",
         componentType: 'select',
         listValues: [
           { value: 'yellow', label: 'Yellow' },
@@ -57,7 +60,8 @@ export const FieldConfig: {[key: string]: IField} = {
     is_promotion: {
         label: 'Promo?',
         value: 'is_promotion',
-        componentType: 'boolean',
+        valueType: "boolean",
+        componentType: 'input',
         operators: [],
     },
 };

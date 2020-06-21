@@ -5,6 +5,9 @@ import "./ButtonBar.css";
 
 interface Props {
     labels: (string | JSX.Element)[];
+    /**
+     * Checked Index
+     */
     checked?: number;
 	onChange?: (i: number) => void;
     style?: React.CSSProperties;

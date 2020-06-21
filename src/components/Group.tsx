@@ -2,6 +2,16 @@
 import React from "react";
 // import {  } from "./common";
 import {Button, ButtonBar } from "./common";
+import { IRule } from "./RuleItem/RuleItem";
+
+interface IGroup {
+  properties: {
+      type: "group";
+      condition: "NOT" |"AND" | "OR" 
+  };
+  children: (IGroup | IRule)[];
+}
+
 
 interface Props {
 

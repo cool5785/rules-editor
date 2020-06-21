@@ -3,24 +3,15 @@ import React from "react";
 import Select from "react-select";
 import { IOperation, Operations, OperationType } from "../modules/Operations";
 import { IField, FieldConfig, FieldOption, FieldValueType } from "../modules/FieldConfig";
-import { ButtonBar } from "../common";
-import { ValueType } from "../FieldValue/FieldValue";
+import { ValueType, FieldValue } from "../FieldValue/FieldValue";
 
-interface IRule {
+export interface IRule {
     properties: {
         type: "rule"
     };
     field: IField;
     operation: IOperation;
     value: ValueType[];
-}
-
-interface IGroup {
-    properties: {
-        type: "group";
-        condition: "NOT" |"AND" | "OR" 
-    };
-    children: (IGroup | IRule)[];
 }
 
 interface RuleProps {
@@ -31,18 +22,6 @@ export const RuleItem = (props: RuleProps) => {
     const [field, setField] = useState(rule.field);
     const [operation, setOperation] = useState(rule.operation);
     const [value, setValue] = useState(rule.value);
-
-    const updateField = () => {
-
-    };
-
-    const updateOperation = () => {
-
-    };
-
-    const updateValue = () => {
-
-    };
 
     const getOperations = (field: IField) => {
         let operations: IOperation[] = [];
@@ -70,7 +49,6 @@ export const RuleItem = (props: RuleProps) => {
                 });   
             }
         }
-
         return operations;
     }
     
@@ -109,7 +87,10 @@ export const RuleItem = (props: RuleProps) => {
             }
             Value:
             {
-                
+                <FieldValue value={value}
+                    field={field}
+                    operation={operation}
+                    onChange={setValue} />
             }
       </div>
     );

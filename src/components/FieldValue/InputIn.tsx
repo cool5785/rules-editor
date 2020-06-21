@@ -3,7 +3,12 @@ import { IOperation } from "../modules/Operations";
 import { ValueType } from "./FieldValue";
 import { useState, useEffect } from "react";
 import React from "react";
+import Select from "react-select";
 
+interface ValueOption {
+    label: string;
+    value: string;
+}
 interface InProps {
     field: IField;
     operation: IOperation;
@@ -15,24 +20,55 @@ export const InputIn = (props: InProps) => {
     const listValues = props.field.listValues;
     const fieldSettings = props.field.fieldSettings;
 
-    // useEffect(()=> {
-    //     console.log("between %d and %d", valueA, valueB);
-    //     props.onChange([valueA, valueB]);
-    // }, [valueA, valueB]);
+    const [selectedValue, setSelectedValue] = useState(props.value);
 
-    // return (
-    //     <div className="betweenValue">
-    //         <input type="number"
-    //             value={valueA.toString()}
-    //             max={fieldSettings?.max}
-    //             min={fieldSettings?.min}
-    //             onChange={(evt)=> setValueA(parseNumber(evt.target.value))}/>
-    //         AND
-    //         <input type="number" 
-    //             value={valueB.toString()}
-    //             max={fieldSettings?.max}
-    //             min={fieldSettings?.min}
-    //             onChange={(evt)=> setValueB(parseNumber(evt.target.value))}/>
-    //     </div>
-    // );
+    useEffect(()=> {
+        console.log("in ", selectedValue.toString());
+        props.onChange(selectedValue);
+    }, [selectedValue]);
+
+    const textToValue = (val: string) => {
+        const vals = val.split(",").map((d)=> d.trim());
+        setSelectedValue(vals);
+    };
+
+    const getOptionsFromValue = (vals: ValueType[]) => {
+        // convert to string for matching
+        vals = vals.map(d => d.toString());
+        let options: ValueOption[] = [];
+
+        if(listValues) {
+            listValues.forEach(d => {
+                if(vals.indexOf(d.value.toString()) > -1) {
+                    options.push(d);
+                }
+            });
+        }
+
+        return options.length ? options : null;
+    };
+
+    const optionToValue = (selected: ValueOption[]| null) => {
+        let vals:string[] = [];
+        if(selected) {
+            vals = selected.map((d)=> d.value);
+        }
+        setSelectedValue(vals);
+    };
+
+    return (
+        <div className="inValue">
+            {
+                listValues ?
+                    <Select
+                        isMulti={true}
+                        value={getOptionsFromValue(props.value)}
+                        options={listValues}
+                        onChange={(selected) =>optionToValue(selected as ValueOption[])} />
+                :   <input type="text"
+                        value={selectedValue.toString()}
+                        onChange={(evt)=> (textToValue(evt.target.value))}/>
+            }
+        </div>
+    );
 };
