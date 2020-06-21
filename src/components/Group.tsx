@@ -6,32 +6,33 @@ import { IRule } from "./RuleItem/RuleItem";
 
 interface IGroup {
   properties: {
-      type: "group";
-      condition: "NOT" |"AND" | "OR" 
+    type: "group";
+    condition: "NOT" | "AND" | "OR" 
   };
   children: (IGroup | IRule)[];
 }
-
 
 interface Props {
 
 }
 
-export const Group = (props: Props) => {
-    // const [age, setAge] = useState(19)
-  
-    return (
-      <div>
-          <Button
-            label={"My Button Test"}
-            theme="aqua"
-            onClick={()=> { console.log("Button is clicked")}} />
-            <ButtonBar
-                labels={["NOT","AND", "OR"]}
-                onChange={(i)=> {
-                    console.log("you have selected", i); 
-                }}
-            ></ButtonBar>
-      </div>
-    )
-  }
+export const GroupItem = (props: Props) => {
+  return (
+    <div className={"groupItem"}>
+        <Button
+          label={"Add Group"}
+          theme="aqua"
+          onClick={()=> { console.log("Add a Group")}}/>
+        <Button
+          label={"Add Rule"}
+          theme="aqua"
+          onClick={()=> { console.log("Add a Rule")}}/>  
+          <ButtonBar
+              labels={["NOT","AND", "OR"]}
+              onChange={(i)=> {
+                  console.log("you have selected", i); 
+              }}
+          ></ButtonBar>
+    </div>
+  )
+}

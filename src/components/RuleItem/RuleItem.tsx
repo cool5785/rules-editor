@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useState, useEffect} from "react";
 import React from "react";
 import Select from "react-select";
 import { IOperation, Operations, OperationType } from "../modules/Operations";
@@ -15,13 +15,23 @@ export interface IRule {
 }
 
 interface RuleProps {
-    itemConfig: IRule
+    config: IRule
 }
 export const RuleItem = (props: RuleProps) => {
-    const [rule, setRule] = useState(props.itemConfig);
+    const [rule, setRule] = useState(props.config);
     const [field, setField] = useState(rule.field);
     const [operation, setOperation] = useState(rule.operation);
     const [value, setValue] = useState(rule.value);
+
+    useEffect(()=>{
+        // Rule updated
+        let ruleObj = props.config;
+        ruleObj.field = field;
+        ruleObj.operation = operation;
+        ruleObj.value = value;
+
+        setRule(ruleObj);
+    }, [field, operation, value]);
 
     const getOperations = (field: IField) => {
         let operations: IOperation[] = [];
@@ -73,25 +83,23 @@ export const RuleItem = (props: RuleProps) => {
     
     return (
       <div className={"ruleItem"}>
-          Field:
-          <Select 
+        Field:
+            <Select 
+                value={field}
                 options={getFields()} 
                 onChange={(selected) =>fieldChange(selected as FieldOption)} />
-          Operation:
-            {
-                field && (
-                    <Select
-                    options={getOperations(field)} 
-                    onChange={(selected) =>operationChange(selected as IOperation)} />
-                )
-            }
-            Value:
-            {
-                <FieldValue value={value}
-                    field={field}
-                    operation={operation}
-                    onChange={setValue} />
-            }
+        Operation:
+            {field && (
+                <Select
+                value={operation}
+                options={getOperations(field)} 
+                onChange={(selected) =>operationChange(selected as IOperation)} />
+            )}
+        Value:
+            <FieldValue value={value}
+                field={field}
+                operation={operation}
+                onChange={setValue} />
       </div>
     );
-  }
+}
