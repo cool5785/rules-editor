@@ -2,33 +2,16 @@ import {useState} from "react";
 import React from "react";
 import Select from "react-select";
 import { IOperation, Operations, OperationType } from "../modules/Operations";
-
-type FieldType = "text" | "number" | "boolean" | "select" | "multiselect";
-interface IField {
-    label: string;
-    type: FieldType;
-    fieldSettings?: {
-        /**
-         * A function that returns true if current selected value is Valid for field
-         */
-        validate?:(value: any)=> boolean;
-        min?: number;
-        max?: number;
-    };
-    /**
-     * Specific set of allowed operations
-     */
-    operators?: OperationType[];
-    listValues?: {label: string; value: string;}[]
-}
-
+import { IField, FieldConfig, FieldOption, FieldValueType } from "../modules/FieldConfig";
+import { ButtonBar } from "../common";
+type ValueType = string | number | boolean;
 interface IRule {
     properties: {
         type: "rule"
     };
     field: IField;
     operation: IOperation;
-    value: (string|number|boolean)[];
+    value: ValueType[];
 }
 
 interface IGroup {
@@ -39,44 +22,73 @@ interface IGroup {
     children: (IGroup | IRule)[];
 }
 
+interface FieldValueProp {
+    field: IField;
+    operation: IOperation;
+    value: ValueType[];
+    onChange: (val: ValueType[]) => void;
+}
+export const FieldValue = (props: FieldValueProp) => {
+    const {
+        valueType
+        , fieldSettings
+    }= props.field;
+    const operationVal = props.operation.value;
+    // const [value1, setValue] = useState(undefined);
 
+    // const getInput = (valueType: FieldValueType) => {
+    //     return (<>
+    //         {valueType === "number" 
+    //             && <input type="number" 
+    //                 max={fieldSettings?.max}
+    //                 min={fieldSettings?.min}
+    //                 onChange={(evt)=> setValue(evt.target.value)}/>
+    //         }
+    //         {valueType === "text"
+    //             && <input type="text"
+    //                 onChange={(evt)=> setValue(evt.target.value)}/>
+    //         }
+    //         {valueType === "boolean"
+    //             && <ButtonBar labels={["True", "False"] } />
+    //         }
+    //     </>);
+    // };
 
-const FieldConfig: {[key: string]: IField} = {
-    qty: {
-        label: 'Qty',
-        type: 'number',
-        fieldSettings: {
-            min: 0,
-        },
-    },
-    price: {
-        label: 'Price',
-        type: 'number',
-        fieldSettings: {
-            min: 10,
-            max: 100,
+    if(operationVal === "between") {
+        const [a, b] = props.value;
+        // return 2 components
+        return (<>
+            {valueType === "number" 
+                && <input type="number" 
+                    value={a.toString()}
+                    max={fieldSettings?.max}
+                    min={fieldSettings?.min}
+                    onChange={(evt)=> setValue(evt.target.value)}/>
+            }
+            {valueType === "text"
+                && <input type="text"
+                    onChange={(evt)=> setValue(evt.target.value)}/>
+            }
+        </>);
+    } else if(operationVal === "in") {
+        // return select box
+    } else {
+        // return single item of field type
+        
+    }
+    return (<div className={"fieldValue"}>
+        {
+            operationVal === "between" && (<>
+                
+            </>)
         }
-    },
-    color: {
-        label: 'Color',
-        type: 'select',
-        listValues: [
-          { value: 'yellow', label: 'Yellow' },
-          { value: 'green', label: 'Green' },
-          { value: 'orange', label: 'Orange' }
-        ],
-    },
-    is_promotion: {
-        label: 'Promo?',
-        type: 'boolean',
-        operators: [],
-    },
+    </div>);
 };
 
-interface Props {
+interface RuleProps {
     itemConfig: IRule
 }
-export const RuleItem = (props: Props) => {
+export const RuleItem = (props: RuleProps) => {
     const [rule, setRule] = useState(props.itemConfig);
     const [field, setField] = useState(rule.field);
     const [operation, setOperation] = useState(rule.operation);
@@ -105,25 +117,64 @@ export const RuleItem = (props: Props) => {
         }
 
         if(operations.length === 0) {
-            const arrKeys = Object.keys(Operations) as OperationType[];
-            arrKeys.forEach(key => {
-                operations.push(Operations[key]);
-            });
+            let arrKeys = Object.keys(Operations) as OperationType[];
+            
+            if(field.valueType === "boolean") {
+                arrKeys = ["equals", "notEqual"];
+            } else {
+                arrKeys.forEach(key => {
+                    // Allow between only in case of field is of number type
+                    if(key === "between" && field.valueType === "number") {
+                        operations.push(Operations[key]);
+                    } else {
+                        operations.push(Operations[key]);
+                    }
+                });   
+            }
         }
 
         return operations;
     }
+    
+    const getFields = () => {
+        let fields: IField[] = [];
+        for(const item in FieldConfig) {
+            fields.push(FieldConfig[item]);
+        }
+        return fields;
+    };
+    
+    
 
-    const getValueComponent = (field: IField) => {
-
+    const fieldChange = (selected: FieldOption) => {
+        if(selected) {
+            setField(FieldConfig[selected.value])
+        }
     }
-
+    const operationChange = (selected: IOperation) => {
+        if(selected) {
+            setOperation(Operations[selected.value as OperationType]);
+        }
+    }
+    
     return (
       <div className={"ruleItem"}>
           Field:
-          <Select options={} />
+          <Select 
+                options={getFields()} 
+                onChange={(selected) =>fieldChange(selected as FieldOption)} />
           Operation:
-          {field && <Select options={getOperations(field)} onChange={} />}
+            {
+                field && (
+                    <Select
+                    options={getOperations(field)} 
+                    onChange={(selected) =>operationChange(selected as IOperation)} />
+                )
+            }
+            Value:
+            {
+                
+            }
       </div>
     );
   }

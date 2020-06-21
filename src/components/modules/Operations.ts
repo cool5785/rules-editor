@@ -1,39 +1,49 @@
+export type OperationType = "equals" | "notEqual"| "lessThan" | "greaterThan" | "lessThanEqual" | "greaterThanEqual" | "between" | "in";
+
 export interface IOperation {
-    value: string;
+    sqlValue: string;
+    value: OperationType;
     label: string;
 }
-export type OperationType = "equals" | "notEqual"| "lessThan" | "greaterThan" | "lessThanEqual" | "greaterThanEqual" | "between" | "in";
 export const Operations: { [key in OperationType]: IOperation } = {
     "equals": {
-        value: "==",
+        value: "equals",
+        sqlValue: "=",
         label: "Equals to"
     },
     "notEqual": {
-        value: "!=",
+        value: "notEqual",
+        sqlValue: "!=",
         label: "Not Equal to"
     },
     "lessThan": {
-        value: "<",
+        value: "lessThan",
+        sqlValue: "<",
         label: "Less than"
     },
     "greaterThan": {
-        value: ">",
+        value: "greaterThan",
+        sqlValue: ">",
         label: "Greater than"
     },
     "lessThanEqual": {
-        value: "<=",
+        value: "lessThanEqual",
+        sqlValue: "<=",
         label: "Less than or Equals to"
     },
     "greaterThanEqual": {
-        value: ">=",
+        value: "greaterThanEqual",
+        sqlValue: ">=",
         label: "Greater than or Equals to"
     },
     "between": {
         value: "between",
+        sqlValue: "BETWEEN",
         label: "Between"
     },
     "in": {
-        value: "valuein",
+        value: "in",
+        sqlValue: "IN",
         label: "Includes"
     }
 };
