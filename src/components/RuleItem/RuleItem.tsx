@@ -4,7 +4,8 @@ import Select from "react-select";
 import { IOperation, Operations, OperationType } from "../modules/Operations";
 import { IField, FieldConfig, FieldOption, FieldValueType } from "../modules/FieldConfig";
 import { ButtonBar } from "../common";
-type ValueType = string | number | boolean;
+import { ValueType } from "../FieldValue/FieldValue";
+
 interface IRule {
     properties: {
         type: "rule"
@@ -21,69 +22,6 @@ interface IGroup {
     };
     children: (IGroup | IRule)[];
 }
-
-interface FieldValueProp {
-    field: IField;
-    operation: IOperation;
-    value: ValueType[];
-    onChange: (val: ValueType[]) => void;
-}
-export const FieldValue = (props: FieldValueProp) => {
-    const {
-        valueType
-        , fieldSettings
-    }= props.field;
-    const operationVal = props.operation.value;
-    // const [value1, setValue] = useState(undefined);
-
-    // const getInput = (valueType: FieldValueType) => {
-    //     return (<>
-    //         {valueType === "number" 
-    //             && <input type="number" 
-    //                 max={fieldSettings?.max}
-    //                 min={fieldSettings?.min}
-    //                 onChange={(evt)=> setValue(evt.target.value)}/>
-    //         }
-    //         {valueType === "text"
-    //             && <input type="text"
-    //                 onChange={(evt)=> setValue(evt.target.value)}/>
-    //         }
-    //         {valueType === "boolean"
-    //             && <ButtonBar labels={["True", "False"] } />
-    //         }
-    //     </>);
-    // };
-
-    if(operationVal === "between") {
-        const [a, b] = props.value;
-        // return 2 components
-        return (<>
-            {valueType === "number" 
-                && <input type="number" 
-                    value={a.toString()}
-                    max={fieldSettings?.max}
-                    min={fieldSettings?.min}
-                    onChange={(evt)=> setValue(evt.target.value)}/>
-            }
-            {valueType === "text"
-                && <input type="text"
-                    onChange={(evt)=> setValue(evt.target.value)}/>
-            }
-        </>);
-    } else if(operationVal === "in") {
-        // return select box
-    } else {
-        // return single item of field type
-        
-    }
-    return (<div className={"fieldValue"}>
-        {
-            operationVal === "between" && (<>
-                
-            </>)
-        }
-    </div>);
-};
 
 interface RuleProps {
     itemConfig: IRule
@@ -143,8 +81,6 @@ export const RuleItem = (props: RuleProps) => {
         }
         return fields;
     };
-    
-    
 
     const fieldChange = (selected: FieldOption) => {
         if(selected) {
