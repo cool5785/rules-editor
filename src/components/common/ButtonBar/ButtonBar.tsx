@@ -19,7 +19,7 @@ interface idAttribute {
 export const ButtonBar: React.SFC<Props> = props => {
     let {
         labels = [""],
-        checked,
+        checked = 1,
         onChange,
 		style = {},
 		id,

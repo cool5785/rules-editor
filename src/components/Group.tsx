@@ -4,7 +4,7 @@ import React from "react";
 import {Button, ButtonBar } from "./common";
 
 interface Props {
-  
+
 }
 
 export const Group = (props: Props) => {
@@ -14,11 +14,10 @@ export const Group = (props: Props) => {
       <div>
           <Button
             label={"My Button Test"}
-
             theme="aqua"
             onClick={()=> { console.log("Button is clicked")}} />
             <ButtonBar
-                labels={["AND", "OR"]}
+                labels={["NOT","AND", "OR"]}
                 onChange={(i)=> {
                     console.log("you have selected", i); 
                 }}
