@@ -49,6 +49,12 @@ export const FieldConfig: FieldConfigType = {
             max: 100,
         }
     },
+    product_name: {
+        label: 'Product Name',
+        value: 'product_name',
+        valueType: "text",
+        componentType: 'input'
+    },
     color: {
         label: 'Color',
         value: 'color',

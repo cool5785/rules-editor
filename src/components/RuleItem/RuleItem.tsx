@@ -2,7 +2,7 @@ import {useState, useEffect} from "react";
 import React from "react";
 import Select from "react-select";
 import { IOperation, Operations, OperationType } from "../modules/Operations";
-import { IField, FieldConfig, FieldOption, FieldValueType } from "../modules/FieldConfig";
+import { IField, FieldConfig, FieldOption } from "../modules/FieldConfig";
 import { ValueType, FieldValue } from "../FieldValue/FieldValue";
 import { Button } from "../common";
 
@@ -22,24 +22,32 @@ interface RuleProps {
 }
 export const RuleItem = (props: RuleProps) => {
     // convert string field name to Field Object to avoid storing whole setting with every rule
-    const ruleField = FieldConfig[props.config.field];
-    const operationObj = Operations[props.config.operation];
+    const { config, onRuleChange } = props;
+    const ruleField = FieldConfig[config.field];
+    const operationObj = Operations[config.operation];
 
-    const [rule, setRule] = useState(props.config);
+    const [rule, setRule] = useState(config);
     const [field, setField] = useState(ruleField);
     const [operation, setOperation] = useState(operationObj);
     const [value, setValue] = useState(rule.value);
 
+    useEffect(()=> {
+        console.log("Value of Rule Changed", rule.value.toString());
+        // Tell parent about ruleChange
+        onRuleChange(rule);
+    }, [rule, onRuleChange]);
+
     useEffect(()=>{
         // Rule updated
-        let ruleObj = props.config;
-        ruleObj.field = field.value;
-        ruleObj.operation = operation.value;
-        ruleObj.value = value;
-
+        let ruleObj: IRule = {
+            properties: {
+                type: "rule"
+            },
+            field: field.value,
+            operation: operation.value,
+            value: value
+        };
         setRule(ruleObj);
-        // Tell parent about ruleChange
-        props.onRuleChange(ruleObj);
     }, [field, operation, value]);
 
     const getOperations = (field: IField) => {

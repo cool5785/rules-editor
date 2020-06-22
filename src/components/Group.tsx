@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {Button, ButtonBar } from "./common";
 import { IRule, RuleItem } from "./RuleItem/RuleItem";
-import { FieldConfig } from "./modules";
+import { FieldConfig } from "./modules/FieldConfig";
 import "./Group.css";
 
 type ConditionType = "NOT" | "AND" | "OR";
@@ -20,11 +20,28 @@ interface Props {
   onGroupDelete: ()=> void;
 }
 export const GroupItem = (props: Props) => {
+  const {config, onGroupChange} = props;
   const arrCondition: ConditionType[] = ["NOT" , "AND" , "OR"];
 
-  const [condition, setCondition] = useState(props.config.properties.condition);
-  const [children, setChildren] = useState(props.config.children as (IGroup|IRule)[]);
+  const [group, setGroup] = useState(config);
+  const [condition, setCondition] = useState(config.properties.condition);
+  const [children, setChildren] = useState(config.children as (IGroup|IRule)[]);
   
+  useEffect(()=> {
+    onGroupChange(group);
+  }, [group, onGroupChange]);
+
+  useEffect(()=> {
+    let groupObj: IGroup = {
+      properties: {
+        type: "group",
+        condition: condition
+      },
+      children: children
+    };
+    setGroup(groupObj);
+  }, [condition, children]);
+
   const updateChild = (idx: number, item:(IRule| IGroup)) => {
     let updatedChildren = children;
     updatedChildren[idx] = item;
@@ -109,11 +126,13 @@ export const GroupItem = (props: Props) => {
           children.map((item, index) => {
             if(item.properties.type === "group") {
               return (<GroupItem 
+                key={index}
                 config={item as IGroup} 
                 onGroupChange={(group) => updateChild(index, group)}
                 onGroupDelete={()=> removeChild(index)} />);
             } else {
               return (<RuleItem 
+                key={index}
                 config={item as IRule} 
                 onRuleChange={(rule) => updateChild(index, rule)}
                 onRuleDelete={()=> removeChild(index)} />);

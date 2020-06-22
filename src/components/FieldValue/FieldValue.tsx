@@ -1,4 +1,5 @@
-import { IField, IOperation } from "../modules";
+import { IField } from "../modules/FieldConfig";
+import {IOperation} from "../modules/Operations";
 import React from "react";
 import { InputBetween } from "./InputBetween";
 import { InputIn } from "./InputIn";
@@ -16,8 +17,8 @@ export const FieldValue = (props: FieldValueProp) => {
     const operationVal = props.operation.value;
 
     return (<div className={"fieldValue"}>
-        {operationVal == "between" && <InputBetween {...props}/>}
-        {operationVal == "in" && <InputIn {...props}/>}
-        {!(operationVal == "between" || operationVal == "in") && <SingleValue {...props}/>}
+        {operationVal === "between" && <InputBetween {...props}/>}
+        {operationVal === "in" && <InputIn {...props}/>}
+        {!(operationVal === "between" || operationVal === "in") && <SingleValue {...props}/>}
     </div>);
 };

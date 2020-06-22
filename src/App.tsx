@@ -2,7 +2,6 @@ import React from 'react';
 // import logo from './logo.svg';
 import './App.css';
 import { GroupItem, IGroup } from './components/Group';
-import { FieldConfig } from './components/modules';
 
 const ruleEditorConfig: IGroup = {
   properties: {
@@ -16,7 +15,7 @@ const ruleEditorConfig: IGroup = {
       },
       field: "qty",
       operation: "equals",
-      value: ["200"]
+      value: [200]
     },
     {
       properties: {
@@ -25,6 +24,14 @@ const ruleEditorConfig: IGroup = {
       field: "qty",
       operation: "notEqual",
       value: ["100"]
+    },
+    {
+      properties: {
+        type: "rule"
+      },
+      field: "product_name",
+      operation: "notEqual",
+      value: ["wooden box"]
     }
   ]
 };

@@ -16,16 +16,14 @@ interface InProps {
     onChange: (val: ValueType[]) => void; 
 }
 export const InputIn = (props: InProps) => {
-    // const [a] = props.value;
-    const listValues = props.field.listValues;
-    const fieldSettings = props.field.fieldSettings;
-
-    const [selectedValue, setSelectedValue] = useState(props.value);
+    const {value, field, onChange} = props;
+    const listValues = field.listValues;
+    const [selectedValue, setSelectedValue] = useState(value);
 
     useEffect(()=> {
         console.log("in ", selectedValue.toString());
-        props.onChange(selectedValue);
-    }, [selectedValue]);
+        onChange(selectedValue);
+    }, [selectedValue, onChange]);
 
     const textToValue = (val: string) => {
         const vals = val.split(",").map((d)=> d.trim());

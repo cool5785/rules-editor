@@ -12,14 +12,14 @@ interface SingleValueProps {
     onChange: (val: ValueType[]) => void; 
 }
 export const SingleValue = (props: SingleValueProps) => {
-    const [selectedValue, setSelectedValue] = useState(props.value);
-    const valueType = props.field.valueType;
-    const fieldSettings = props.field.fieldSettings;
+    const {value, field, onChange }= props;
+    const [selectedValue, setSelectedValue] = useState(value);
+    const { valueType, fieldSettings} = field;
 
     useEffect(()=> {
         console.log("single value", selectedValue.toString());
-        props.onChange(selectedValue);
-    }, [selectedValue]);
+        onChange(selectedValue);
+    }, [selectedValue, onChange]);
 
     const onTextChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
         const val = evt.target.value;
@@ -51,6 +51,7 @@ export const SingleValue = (props: SingleValueProps) => {
             }
             {
                 valueType === "number" && <input type="number" 
+                    value={selectedValue.toString()}
                     max={fieldSettings?.max}
                     min={fieldSettings?.min}
                     onChange={onNumberChange}/>

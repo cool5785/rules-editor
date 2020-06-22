@@ -15,6 +15,7 @@ export const InputBetween = (props: BetweenProps) => {
     const [valueA, setValueA] = useState(a);
     const [valueB, setValueB] = useState(b);
     const fieldSettings = props.field.fieldSettings;
+    const onChange = props.onChange;
 
     const parseNumber = (val: string) => {
         return val ? Number(val): val;
@@ -22,8 +23,8 @@ export const InputBetween = (props: BetweenProps) => {
 
     useEffect(()=> {
         console.log("between %d and %d", valueA, valueB);
-        props.onChange([valueA, valueB]);
-    }, [valueA, valueB]);
+        onChange([valueA, valueB]);
+    }, [valueA, valueB, onChange]);
 
     return (
         <div className="betweenValue">
