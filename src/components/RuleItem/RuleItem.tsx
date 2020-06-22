@@ -9,8 +9,8 @@ export interface IRule {
     properties: {
         type: "rule"
     };
-    field: IField;
-    operation: IOperation;
+    field: string;
+    operation: OperationType;
     value: ValueType[];
 }
 
@@ -18,16 +18,20 @@ interface RuleProps {
     config: IRule
 }
 export const RuleItem = (props: RuleProps) => {
+    // convert string field name to Field Object to avoid storing whole setting with every rule
+    const ruleField = FieldConfig[props.config.field];
+    const operationObj = Operations[props.config.operation];
+
     const [rule, setRule] = useState(props.config);
-    const [field, setField] = useState(rule.field);
-    const [operation, setOperation] = useState(rule.operation);
+    const [field, setField] = useState(ruleField);
+    const [operation, setOperation] = useState(operationObj);
     const [value, setValue] = useState(rule.value);
 
     useEffect(()=>{
         // Rule updated
         let ruleObj = props.config;
-        ruleObj.field = field;
-        ruleObj.operation = operation;
+        ruleObj.field = field.value;
+        ruleObj.operation = operation.value;
         ruleObj.value = value;
 
         setRule(ruleObj);
