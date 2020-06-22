@@ -26,7 +26,10 @@ export interface IField {
     operators?: OperationType[];
     listValues?: {label: string; value: string;}[]
 }
-export const FieldConfig: {[key: string]: IField} = {
+export interface FieldConfigType {
+    [key: string]: IField;
+}
+export const FieldConfig: FieldConfigType = {
     qty: {
         label: 'Qty',
         value: 'qty',

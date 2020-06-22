@@ -1,38 +1,126 @@
-// import {useState} from "react";
-import React from "react";
-// import {  } from "./common";
+import React, { useState } from "react";
 import {Button, ButtonBar } from "./common";
-import { IRule } from "./RuleItem/RuleItem";
+import { IRule, RuleItem } from "./RuleItem/RuleItem";
+import { FieldConfig } from "./modules";
+import "./Group.css";
 
-interface IGroup {
+type ConditionType = "NOT" | "AND" | "OR";
+
+export interface IGroup {
   properties: {
     type: "group";
-    condition: "NOT" | "AND" | "OR" 
+    condition: ConditionType;
   };
   children: (IGroup | IRule)[];
 }
 
 interface Props {
-
+  config: IGroup;
+  onGroupChange: (item: IGroup) => void;
+  onGroupDelete: ()=> void;
 }
-
 export const GroupItem = (props: Props) => {
+  const arrCondition: ConditionType[] = ["NOT" , "AND" , "OR"];
+
+  const [condition, setCondition] = useState(props.config.properties.condition);
+  const [children, setChildren] = useState(props.config.children as (IGroup|IRule)[]);
+  
+  const updateChild = (idx: number, item:(IRule| IGroup)) => {
+    let updatedChildren = children;
+    updatedChildren[idx] = item;
+    setChildren(updatedChildren);
+  };
+
+  const removeChild = (idx: number) => {
+    let updatedChildren = children;
+    updatedChildren.splice(idx, 1);
+    setChildren(updatedChildren);
+  };
+
+  const getNewRule = (): IRule => {
+    const FieldKeys = Object.keys(FieldConfig);
+    let ruleConfig: IRule = {
+      properties:{
+        type: "rule"
+      }
+      , field: FieldKeys[0]
+      , operation: "equals"
+      , value:[]
+    };
+    return ruleConfig;
+  };
+
+  const addNewRule = () => {
+    console.log("Add New Rule");
+
+    let updatedChildren = children;
+
+    const ruleItem = getNewRule();
+    updatedChildren.push(ruleItem);
+    setChildren(updatedChildren);
+  };
+
+  /**
+   * Add new group with 1 Rule
+   */
+  const addNewGroup = () => {
+    console.log("Add New Group");
+
+    let updatedChildren = children;
+
+    let ruleItem = getNewRule();
+    let groupConfig: IGroup = {
+      properties: {condition: "AND", type: "group" }
+      , children: [ruleItem]
+    };
+    updatedChildren.push(groupConfig);
+    setChildren(updatedChildren);
+  };
+
   return (
     <div className={"groupItem"}>
-        <Button
-          label={"Add Group"}
-          theme="aqua"
-          onClick={()=> { console.log("Add a Group")}}/>
-        <Button
-          label={"Add Rule"}
-          theme="aqua"
-          onClick={()=> { console.log("Add a Rule")}}/>  
-          <ButtonBar
-              labels={["NOT","AND", "OR"]}
-              onChange={(i)=> {
-                  console.log("you have selected", i); 
-              }}
-          ></ButtonBar>
+      <div className="actionHeader">
+        <ButtonBar
+          labels={arrCondition}
+          checked={arrCondition.indexOf(condition)}
+          onChange={(i)=> {
+            setCondition(arrCondition[i]);
+            console.log("you have selected condition", arrCondition[i]); 
+          }}></ButtonBar>
+
+        <div className="addAction">
+          <Button
+            label={"Add Group"}
+            theme="aqua"
+            onClick={addNewGroup}/>
+          <Button
+            label={"Add Rule"}
+            theme="aqua"
+            onClick={addNewRule}/> 
+          <Button 
+            label={"🗑"} 
+            theme="aqua"
+            onClick={props.onGroupDelete}
+            tooltip={{position: "top" ,text: "Delete Group"}}/>
+        </div>
+      </div>
+      <div className="groupBody">
+        {
+          children.map((item, index) => {
+            if(item.properties.type === "group") {
+              return (<GroupItem 
+                config={item as IGroup} 
+                onGroupChange={(group) => updateChild(index, group)}
+                onGroupDelete={()=> removeChild(index)} />);
+            } else {
+              return (<RuleItem 
+                config={item as IRule} 
+                onRuleChange={(rule) => updateChild(index, rule)}
+                onRuleDelete={()=> removeChild(index)} />);
+            }
+          })
+        }
+      </div>
     </div>
   )
 }

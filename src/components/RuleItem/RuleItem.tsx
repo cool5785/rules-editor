@@ -4,6 +4,7 @@ import Select from "react-select";
 import { IOperation, Operations, OperationType } from "../modules/Operations";
 import { IField, FieldConfig, FieldOption, FieldValueType } from "../modules/FieldConfig";
 import { ValueType, FieldValue } from "../FieldValue/FieldValue";
+import { Button } from "../common";
 
 export interface IRule {
     properties: {
@@ -15,7 +16,9 @@ export interface IRule {
 }
 
 interface RuleProps {
-    config: IRule
+    config: IRule;
+    onRuleChange: (rule: IRule) => void;
+    onRuleDelete: () => void;
 }
 export const RuleItem = (props: RuleProps) => {
     // convert string field name to Field Object to avoid storing whole setting with every rule
@@ -35,6 +38,8 @@ export const RuleItem = (props: RuleProps) => {
         ruleObj.value = value;
 
         setRule(ruleObj);
+        // Tell parent about ruleChange
+        props.onRuleChange(ruleObj);
     }, [field, operation, value]);
 
     const getOperations = (field: IField) => {
@@ -87,6 +92,9 @@ export const RuleItem = (props: RuleProps) => {
     
     return (
       <div className={"ruleItem"}>
+            <Button label={"🗑"} 
+                onClick={props.onRuleDelete}
+                tooltip={{position: "bottom" ,text: "Delete Rule"}} />
         Field:
             <Select 
                 value={field}
