@@ -25,9 +25,10 @@ export const GroupItem = (props: Props) => {
 
   const [group, setGroup] = useState(config);
   const [condition, setCondition] = useState(config.properties.condition);
-  const [children, setChildren] = useState(config.children as (IGroup|IRule)[]);
+  const [children, setChildren] = useState(config.children);
   
   useEffect(()=> {
+    console.log("Group is updated");
     onGroupChange(group);
   }, [group, onGroupChange]);
 
@@ -39,11 +40,23 @@ export const GroupItem = (props: Props) => {
       },
       children: children
     };
+
     setGroup(groupObj);
   }, [condition, children]);
 
+  useEffect(()=> {
+    console.log("Children updated", children.length);
+  }, [children]);
+
+  const setGroupForChildren = (items: (IRule|IGroup)[]) =>{
+    const groupItem = {...group};
+    groupItem.children = items;
+    setGroup(groupItem);
+  }
+
   const updateChild = (idx: number, item:(IRule| IGroup)) => {
     let updatedChildren = children;
+    console.log("Group >> " + item.properties.type + " >> Child updated at ", idx, " value: ");
     updatedChildren[idx] = item;
     setChildren(updatedChildren);
   };
@@ -52,6 +65,7 @@ export const GroupItem = (props: Props) => {
     let updatedChildren = children;
     updatedChildren.splice(idx, 1);
     setChildren(updatedChildren);
+    // setX(x+1);
   };
 
   const getNewRule = (): IRule => {
@@ -75,6 +89,7 @@ export const GroupItem = (props: Props) => {
     const ruleItem = getNewRule();
     updatedChildren.push(ruleItem);
     setChildren(updatedChildren);
+    // setX(x+1);
   };
 
   /**
@@ -92,6 +107,9 @@ export const GroupItem = (props: Props) => {
     };
     updatedChildren.push(groupConfig);
     setChildren(updatedChildren);
+
+    
+    // setX(x+1);
   };
 
   return (
