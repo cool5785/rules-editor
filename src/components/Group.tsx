@@ -44,16 +44,6 @@ export const GroupItem = (props: Props) => {
     setGroup(groupObj);
   }, [condition, children]);
 
-  useEffect(()=> {
-    console.log("Children updated", children.length);
-  }, [children]);
-
-  const setGroupForChildren = (items: (IRule|IGroup)[]) =>{
-    const groupItem = {...group};
-    groupItem.children = items;
-    setGroup(groupItem);
-  }
-
   const updateChild = (idx: number, item:(IRule| IGroup)) => {
     let updatedChildren = children;
     console.log("Group >> " + item.properties.type + " >> Child updated at ", idx, " value: ");
@@ -107,15 +97,30 @@ export const GroupItem = (props: Props) => {
     };
     updatedChildren.push(groupConfig);
     setChildren(updatedChildren);
-
-    
     // setX(x+1);
+  };
+
+  const getChildNode = (item: (IRule| IGroup), index: number) => {
+    if(item.properties.type === "group") {
+      return (<GroupItem 
+        key={index}
+        config={item as IGroup} 
+        onGroupChange={(group) => updateChild(index, group)}
+        onGroupDelete={()=> removeChild(index)} />);
+    } else {
+      return (<RuleItem 
+        key={index}
+        config={item as IRule} 
+        onRuleChange={(rule) => updateChild(index, rule)}
+        onRuleDelete={()=> removeChild(index)} />);
+    }
   };
 
   return (
     <div className={"groupItem"}>
-      <div className="actionHeader">
+      <div className="actionHeader clearfix">
         <ButtonBar
+          className={"conditionButton"}
           labels={arrCondition}
           checked={arrCondition.indexOf(condition)}
           onChange={(i)=> {
@@ -141,21 +146,7 @@ export const GroupItem = (props: Props) => {
       </div>
       <div className="groupBody">
         {
-          children.map((item, index) => {
-            if(item.properties.type === "group") {
-              return (<GroupItem 
-                key={index}
-                config={item as IGroup} 
-                onGroupChange={(group) => updateChild(index, group)}
-                onGroupDelete={()=> removeChild(index)} />);
-            } else {
-              return (<RuleItem 
-                key={index}
-                config={item as IRule} 
-                onRuleChange={(rule) => updateChild(index, rule)}
-                onRuleDelete={()=> removeChild(index)} />);
-            }
-          })
+          children.map(getChildNode)
         }
       </div>
     </div>

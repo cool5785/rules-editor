@@ -42,7 +42,7 @@ function App() {
       <header className="App-header">
         <GroupItem
           onGroupChange={(item)=> {
-              console.log("Updated Group ", JSON.stringify(item));
+              console.log("Updated Group ",item);
           }}
           onGroupDelete={()=> console.log("Trying to delete root group")}
           config={ruleEditorConfig} />

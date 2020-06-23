@@ -29,13 +29,13 @@ export const InputBetween = (props: BetweenProps) => {
     return (
         <div className="betweenValue">
             <input type="number"
-                value={valueA.toString()}
+                value={valueA?.toString()}
                 max={fieldSettings?.max}
                 min={fieldSettings?.min}
                 onChange={(evt)=> setValueA(parseNumber(evt.target.value))}/>
             AND
             <input type="number" 
-                value={valueB.toString()}
+                value={valueB?.toString() || ""}
                 max={fieldSettings?.max}
                 min={fieldSettings?.min}
                 onChange={(evt)=> setValueB(parseNumber(evt.target.value))}/>

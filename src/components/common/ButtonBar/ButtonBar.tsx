@@ -27,7 +27,7 @@ export const ButtonBar: React.SFC<Props> = props => {
 		style = {},
 		id,
 		disabled,
-		className = "activeButtonBar",
+		className = "",
     } = props;
 
     const [selected, setSelected] = React.useState(checked);

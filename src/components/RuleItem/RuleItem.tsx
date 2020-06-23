@@ -5,6 +5,7 @@ import { IOperation, Operations, OperationType } from "../modules/Operations";
 import { IField, FieldConfig, FieldOption } from "../modules/FieldConfig";
 import { ValueType, FieldValue } from "../FieldValue/FieldValue";
 import { Button } from "../common";
+import "./RuleItem.css";
 
 export interface IRule {
     properties: {
@@ -100,26 +101,34 @@ export const RuleItem = (props: RuleProps) => {
     
     return (
       <div className={"ruleItem"}>
-            <Button label={"🗑"} 
-                onClick={props.onRuleDelete}
-                tooltip={{position: "bottom" ,text: "Delete Rule"}} />
-        Field:
+          <div className={"field"}>
+            Field:
             <Select 
                 value={field}
                 options={getFields()} 
                 onChange={(selected) =>fieldChange(selected as FieldOption)} />
-        Operation:
-            {field && (
-                <Select
-                value={operation}
-                options={getOperations(field)} 
-                onChange={(selected) =>operationChange(selected as IOperation)} />
-            )}
-        Value:
-            <FieldValue value={value}
-                field={field}
-                operation={operation}
-                onChange={setValue} />
+          </div>
+          <div className="operation">
+            Operation:
+                {field && (
+                    <Select
+                    value={operation}
+                    options={getOperations(field)} 
+                    onChange={(selected) =>operationChange(selected as IOperation)} />
+                )}
+          </div>
+          <div className="value">
+            Value:
+                <FieldValue value={value}
+                    field={field}
+                    operation={operation}
+                    onChange={setValue} />
+          </div>
+          <div className="action">
+            <Button label={"🗑"} 
+                onClick={props.onRuleDelete}
+                tooltip={{position: "bottom" ,text: "Delete Rule"}} />
+          </div>    
       </div>
     );
 }
