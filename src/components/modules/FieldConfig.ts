@@ -24,6 +24,9 @@ export interface IField {
      * Specific set of allowed operations
      */
     operators?: OperationType[];
+    /**
+     * Set of allowed values for Dropdown
+     */
     listValues?: {label: string; value: string;}[]
 }
 export interface FieldConfigType {

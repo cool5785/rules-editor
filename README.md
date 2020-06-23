@@ -1,5 +1,96 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+Rule Editor for handling following cases:
+- [How to use](#how-to-use)
+- [Functionalities](#functionalities)
+  - [Group and Rules](#group-and-rules)
+  - [Sample Output](#sample-output)
+- [Pending features](#pending-features)
+- [Bugs](#bugs)
+  - [Components](#components)
+    - [Field Interface](#field-interface)
+- [Available Scripts](#available-scripts)
+  - [`yarn start`](#yarn-start)
+  - [`yarn test`](#yarn-test)
+  - [`yarn build`](#yarn-build)
+
+## How to use
++ Update fields for filter in ```module/FieldConfig.ts```
++ Update basic rule in ```App.tsx```
+
+## Functionalities
+
+### Group and Rules
+Each group can have:
+  + Another Group or Rule
+  + condition: AND | OR | NOT
+
+Each Rule can have:
+
+  + field: One of the field from ```FieldConfig.ts```
+  + operation: ```"equals" | "notEqual"| "lessThan" | "greaterThan" | "lessThanEqual" | "greaterThanEqual" | "between" | "in"``` 
+  + value: Array of value
+
+### Sample Output
+Check ```output/assignment-output.png```
+
+![](output/assignment-output.png)
+ 
+## Pending features
++ Mobile View
++ Service calls for storing and updating rule
+
+## Bugs
+For some reason the children are not updated immediately when you click on "Add Group" or "Add Rule" | "Delete" buttons
+
+**Workaround is:**  ```After clicking or updating, change the condition of main group to trigger re-render ```
+
+### Components
+  + field: Dropdown
+  + operation: Dropdown
+  + value:
+    + SingleValue
+      + Text
+      + Number
+      + Boolean
+    + when ```operation === "BETWEEN"```
+      + 2 Numeric Input field
+    + when ```operation === "IN"```
+      + select dropdown with ```listValues``` from fieldSettings if available
+      + Else input box [provide value separated by ","]
+
+#### Field Interface
+```
+type FieldComponentType = "input" | "select" | "multiselect" | "slider";
+
+export type FieldValueType = "text" | "number" | "boolean";
+
+export interface IField {
+    label: string;
+    value: string;
+    componentType: FieldComponentType;
+    valueType: FieldValueType;
+    fieldSettings?: {
+        /**
+         * A function that returns true if current selected value is Valid for field
+         */
+        validate?:(value: any)=> boolean;
+        errorMsg?: string;
+        /** Min max for numeric field */
+        min?: number;
+        max?: number;
+    };
+    /**
+     * Specific set of allowed operations
+     */
+    operators?: OperationType[];
+    /**
+     * Set of allowed values for Dropdown
+     */
+    listValues?: {label: string; value: string;}[]
+}
+```
+
 ## Available Scripts
 
 In the project directory, you can run:
@@ -26,19 +117,3 @@ The build is minified and the filenames include the hashes.<br />
 Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
